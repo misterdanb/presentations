@@ -1,0 +1,478 @@
+\pdfminorversion=4
+
+\documentclass{beamer}
+
+\usepackage{beamerthemeshadow}
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\usepackage{varwidth}
+\usepackage{amsmath}
+\usepackage[autostyle=true]{csquotes}
+\usepackage[backend=bibtex8]{biblatex}
+
+\usepackage{pgfplots}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}[text]
+\useoutertheme{infolines}
+
+\bibliography{./refs}
+
+\begin{document}
+
+\title[Asymptotische Analyse von EFs]{Asymptotische Analyse von Erzeugenden-Funktonen}
+\subtitle{mit dem Anwendungsbeispiel regulärer Sprachen}
+\author{Daniel Busch}
+\date{\today}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}\frametitle{Inhalt}
+  \begin{itemize}
+    \item Grundlagen zur Berechnung der Asymptotik von EFs
+    \uncover<2-5>{\item Asymptotik von rationalen EFs}
+    \uncover<3-5>{\item Asymptotik von meromorphen EFs}
+    \uncover<4-5>{\item Rationale EFs und reguläre Sprachen}
+    \uncover<5-5>{\item Ein paar Beispiele}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  \begin{block}{Satz 1: Asymptotik rationaler EFs bei einer eindeutigen Polstelle kleinsten Modulus (Theorem 4.1, [SF96])}
+  	Sei $f = \frac{P}{Q}$ eine rationale Funktion mit $P, Q \in \mathbb{C}[z]$ teilerfremd. Sei weiter $z_0 = \frac{1}{\beta}$ die eindeutige Polstelle, sodass $|\beta| > |\alpha|$ für alle Polstellen $\frac{1}{\alpha} \neq \frac{1}{\beta}$. Dann gilt
+  	\[
+  	  [z^n] f \sim C \beta^n n^{\nu - 1} \,\, \text{ mit } \,\, C = \nu \frac{(-\beta)^\nu P(\frac{1}{\beta})}{\frac{d^\nu}{dz^\nu} Q(\frac{1}{\beta})} \text{.}
+  	\]
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  \textbf{Beweis:}
+  Wir benötigen zunächst die Partialbruchzerlegung der Funktion $f$. \\
+  \qquad \\
+  \begin{block}{Partialbruchzerlegung}
+    Sei $f = \frac{P}{Q}$ eine rationale Funktion mit $P, Q \in \mathbb{C}[z]$ und $0 \leq \text{grad}(P) < \text{grad}(Q) = k$. $Q$ habe die Produktdarstellung
+    \[
+      Q = c (z - \frac{1}{\alpha_1})^{\nu_1} \cdots (z - \frac{1}{\alpha_k})^{\nu_k} \text{.}
+    \]
+    Dann besitzt $f$ eine Darstellung der Form
+    \[
+      \frac{P}{Q} = \sum\limits_{i = 0}^k \sum\limits_{j = 0}^{\nu_i} \frac{a_{ij}}{(z - \frac{1}{\alpha_i})^j} \text{.}
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Offensichtlich gehören alle Terme der Summe zu einem der Polstellen der Funktion $f$ und können in die Form $a'_{ij} (1 - \alpha_i z)^{-j}$ gebracht werden:
+  \begin{align*}
+    \frac{a_{ij}}{(z - \frac{1}{\alpha_i})^j} = \frac{(-1)^j a_{ij}}{(\frac{1}{\alpha_i} - z)^j}
+    = \frac{(-1)^j \frac{1}{\alpha_i^j} a_{ij}}{(1 - \alpha_i z)^j}
+    = \frac{a'_{ij}}{(1 - \alpha_i z)^j}
+  \end{align*}
+  Da es nach Annahme eine eindeutige Polstelle $\frac{1}{\beta}$ kleinsten Modulus gibt ist klar:
+  \[
+    |\alpha_i| < |\beta| \quad \forall \alpha_i
+  \]
+  
+  Im Folgenden wird gezeigt, dass alle Terme bis auf den Term $c_0 (1 - \beta z)^{-\nu_\beta}$ asymptotisch vernachlässigbar sind.
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Wir betrachten zunächst den $n$-ten Kooeffizienten einer der Terme (der konstante Faktor kann ignoriert werden):
+  \begin{align*}
+    [z^n] \frac{1}{(1 - \alpha z)^{\nu_\alpha}} &= \frac{1}{n!} \frac{d^n}{dz^n} \frac{1}{(1 - \alpha z)^{\nu_\alpha}} \bigg|_{z =0} \\
+    &= \frac{1}{n!} \left( (-\nu_\alpha) (-\nu_\alpha - 1) \cdots (-\nu_\alpha - (n - 1) \right) (-\alpha)^n \\
+    &= \frac{(\nu_\alpha + n - 1)!}{(\nu_\alpha - 1)! n!} \alpha^n \\
+    &= \begin{pmatrix}
+      \nu_\alpha + n - 1 \\
+      \nu_\alpha - 1
+    \end{pmatrix}
+    \alpha^n
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Für den Binomialkoeffizienten gilt:
+  \[
+    \begin{pmatrix}
+      n \\ k
+    \end{pmatrix}
+    = \frac{n!}{k! (n - k)!}
+    = \frac{n (n - 1) \cdots (n - k + 1)}{k!}
+    \leq \frac{n^k}{k!}
+  \]
+  \[
+    \lim\limits_{n \rightarrow \infty} \frac{n (n - 1) \cdots (n - k + 1)}{n^k} = 1 \implies \begin{pmatrix}
+      n \\ k
+    \end{pmatrix} \sim \frac{n^k}{k!}
+  \]
+  Damit lassen sich die Koeffizienten mit
+  \[
+    [z^n] \frac{1}{(1 - \alpha z)^{\nu_\alpha}}
+    \sim \frac{(\nu_\alpha + n - 1)^{\nu_\alpha - 1}}{(\nu_\alpha - 1)!} \alpha^n
+    \sim \frac{n^{\nu_\alpha - 1}}{(\nu_\alpha - 1)!} \alpha^n
+  \]
+  asymptotisch abschätzen.
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Für $|\alpha| < |\beta|$ gilt nun aber
+  \[
+    n^k \alpha^n \in o(\beta^n) \text{, }
+  \]
+  denn es ist
+  \begin{align*}
+    \lim\limits_{n \rightarrow \infty} \frac{n^k \alpha^n}{\beta^n}
+    = \lim\limits_{n \rightarrow \infty} \frac{n^k}{\left( \frac{\beta}{\alpha} \right)^n} = 0 \text{.}
+  \end{align*}
+  Für die Asymptotik von $f$ gilt dann:
+  \[
+    [z^n] f \sim [z^n] \frac{c_0}{(1 - \beta z)^{\nu_\beta}}
+  \]
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Um die Konstante $c_0$ zu bestimmen, kann man einfach das Verhalten der Funktion in der Nähe der Polstelle $1 / \beta$ betrachten:
+  \[
+    c_0 = \lim\limits_{z \rightarrow 1 / \beta} (1 - \beta z)^{\nu_\beta} f(z) = \lim\limits_{z \rightarrow 1 / \beta} (1 - \beta z)^{\nu_\beta} \frac{P(z)}{Q(z)}
+  \]
+  Da $P$ und $Q$ teilerfremd sind, folgt mit der $\nu_\beta$-fachen Anwendung der Regel von L’Hospital:
+  \[
+    c_0 = P(1 / \beta) \lim\limits_{z \rightarrow 1 / \beta} \frac{\frac{d^{\nu_\beta}}{dz^{\nu_\beta}} (1 - \beta z)^{\nu\beta}}{\frac{d^{\nu_\beta}}{dz^{\nu_\beta}} Q(z)} = P(1 / \beta) \frac{\nu_\beta! (-\beta)^{\nu_\beta}}{\frac{d^{\nu_\beta}}{dz^{\nu_\beta}} Q(1 / \beta)}
+  \]
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik rationaler EFs}
+  Zusammengefasst ergibt
+  \[
+    [z^n] \frac{c_0}{(1 - \beta z)^{\nu_\beta}}
+    \sim \frac{c_0 n^{\nu_\beta - 1}}{(\nu_\beta - 1)!} \beta^n \,\, \text{ und } \,\,
+    c_0 = P(1 / \beta) \frac{\nu_\beta! (-\beta)^{\nu_\beta}}{\frac{d^{\nu_\beta}}{dz^{\nu_\beta}} Q(1 / \beta)} \text{, }
+  \]
+  dass
+  \[
+    [z^n] f \sim C \beta^n n^{\nu_\beta - 1} \,\, \text{ mit } \,\, C = \nu_\beta \frac{(-\beta)^{\nu_\beta} P(1 / \beta)}{\frac{d^{\nu_\beta}}{dz^{\nu_\beta}} Q(1 / \beta)} \text{.}
+  \]
+  $\qquad$
+  \hfill
+  $\square$
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Dieser Satz lässt sich noch für mehrere (endlich viele) Polstellen, die gemeinsam auf dem Konvergenzring einer EF liegen, verallgemeinern! \\
+  \qquad \\
+  Dazu allerdings erst noch ein paar Definitionen und Sätze: \\
+  \qquad \\
+  \begin{block}{Definition: Holomorphe Funktion}
+  	Eine Funktion $f: U \rightarrow \mathbb{C}$ heißt holomorph in $z_0 \in \mathbb{C}$, falls $f$ in einer Umgebung $U$ von $z_0$ komplex differenzierbar ist. Dann heißt $f$ auch holomorph auf $U$.
+  \end{block}
+  \begin{block}{Definition: Meromorphe Funktion}
+    Eine komplexe Funktion $f$ heißt meromorph, wenn sie bis auf Polstellen holomorph ist.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  \begin{block}{Definition: Laurent-Reihe}
+  	Die Laurent-Reihe von $f: U \rightarrow \mathbb{C}$ um einen Punkt $c \in \mathbb{C}$ ist gegeben durch
+  	\[
+  	  f(z) = \sum\limits_{n = -\infty}^\infty a_n (z - c)^n
+  	  \,\, \text{ mit } \,\,
+  	  a_n = \frac{1}{2 \pi i} \oint_\gamma \frac{f(z)}{(z - c)^{n + 1}} dz \text{.}
+  	\]
+  \end{block}
+  \begin{block}{Definition: Hauptteil und Nebenteil}
+    Die Laurent-Reihe besteht aus einem Haupt- und einem Nebenteil:
+    \[
+      f(z) = H(z) + N(z)
+    \]
+    Diese sind gegeben durch:
+    \[
+      H(z) = \sum\limits_{n = 1}^\infty a_{-n} z^{-n}
+      \,\, \text{ und } \,\,
+      N(z) = \sum\limits_{n = 0}^\infty a_n z^n
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  \textbf{Bemerkung 1:} Die Laurent-Reihe um einen isolierten Pol $z_0$ entwickelt hat einen bei $k$ abbrechenden Hauptteil, wobei $\nu$ die Multiplizität der Polstelle ist! Damit gilt:
+  \begin{align*}
+    H(f; z_0) &= \sum\limits_{n = 1}^\nu \frac{a_{-j}}{(z - z_0)^n} \\
+              &= \sum\limits_{n = 1}^\nu \frac{(-1)^n a_{-n}}{(z_0 - z)^n} \\
+              &= \sum\limits_{n = 1}^\nu \frac{(-1)^n a_{-n}}{z_0^n} \frac{1}{(1 - \frac{z}{z_0})^n}
+  \end{align*}
+  ($H(f; z_0)$ soll hier den Hauptteil der Laurent-Entwicklung von $f$ um den Punkt $z_0$ bezeichnen)
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Mit der Potenzreihenentwicklung
+  \[
+  	\frac{1}{(1 - z)^{j + 1}} = \sum\limits_{i = 0}^\infty \begin{pmatrix} i + j \\ i \end{pmatrix} z^n
+  \]
+  gilt weiter:
+  \begin{align*}
+    H(f; z_0) &= \sum\limits_{n = 1}^\nu \frac{(-1)^n a_{-n}}{z_0^n} \sum\limits_{m = 0}^\infty \begin{pmatrix} m + n - 1 \\ m \end{pmatrix} \left( \frac{z}{z_0} \right)^m \\
+              &= \sum\limits_{m = 0}^\infty \underbrace{\left( \sum\limits_{n = 1}^\nu \begin{pmatrix} m + n - 1 \\ n - 1 \end{pmatrix} \frac{(-1)^n a_{-n}}{z_0^{n + m}} \right)}_{= a_m} z^m
+  \end{align*}
+  
+  \textbf{Bemerkung 2:} Die Laurent-Reihe um einen analytischen Punkt $z_0$ entwickelt hat $H(f; z_0) = 0$!
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  \begin{block}{Koeffizienten-Abschätzung (Theorem 2.4.3, [W92])}
+    Sei $f(z) = \sum_{n \geq 0} a_n z^n$ analytisch in einer Umgebung, die den Ursprung enthält. Sei $z_0 \neq 0$ eine Singularität von $f$. Dann gilt
+    \[
+      \forall \varepsilon > 0 \, \exists n_0 \in \mathbb{N} \, \forall n > n_0: |a_n| < \left( \frac{1}{|z_0|} + \varepsilon \right)^n
+    \]
+    und für unendliche viele $n$ gilt weiter
+    \[
+      |a_n| > \left( \frac{1}{|z_0|} - \varepsilon \right)^n \text{.}
+    \]
+  \end{block}
+  %\qquad \\
+  %Daraus folgt auch unmittelbar:
+  %\[
+  %  |a_n| \in O \left( \left(\frac{1}{|z_0|} + \varepsilon \right)^n \right)
+  %\]
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  \begin{block}{Satz 2: Asymptotik meromorhper EFs bei mehreren Polstellen kleinsten Modulus (Theorem 5.2.1, [W92])}
+    Sei $f$ eine meromorphe Funktion und analytisch im Ursprung. Seien $z_0, \dots, z_s$ die Polstellen von $f$ mit $r = |z_0| = \dots = |z_s|$ und $|z_0| < |y|$ für alle anderen Polstellen $y$. Ferner sei $r' > r$ Modulus der Polstellen des nächstgrößeren Modulus. Es gilt dann
+    \[
+      [z^n] f = [z^n] \left( \sum\limits_{i = 0}^s H(f; z_i) \right) + O\left( \left( \frac{1}{r'} + \varepsilon \right)^n \right) \text{.}
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  \textbf{Beweis:}
+  Die Idee ist, die Polstellen von $f$ auf dem Konvergenzkreis $r$ zu entfernen und das Resultat mit der eben gezeigten oberen Schranke abzuschätzen. Dazu subtrahieren wir den Hauptteil von $f$ um $z_0$ entwickelt von $f$ selbst, den Hauptteil der entstandenen Funktion, diesmal aber um $z_1$ entwickelt, wieder von dieser und so weiter, bis keine Polstellen auf $r$ mehr vorhanden sind. \\
+  \qquad \\
+  \[
+    g = f - H(f; z_0)
+  \]
+  \[
+    g' = g - H(g; z_1) = f - H(f; z_0)) - H(f - H(f; z_0); z_1))
+  \]
+  \[
+    \vdots
+  \]
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Den Term $H(f - H(f; z_0); z_1))$ kann man aber umschreiben als:
+  \begin{align*}
+    H(f - H(f; z_0); z_1)) &= \sum\limits_{n = 1}^\infty a_n (z - z_1)^n \\
+                           &= \sum\limits_{n = 1}^\infty \left( \frac{1}{2 \pi i} \oint_\gamma \frac{f - H(f; z_0)}{(z - z_0)^{n + 1}} dz \right) (z - z_1)^n \\
+                           &= \sum\limits_{n = 1}^\infty \left( \frac{1}{2 \pi i} \oint_\gamma \frac{f}{(z - z_0)^{n + 1}} dz \right) (z - z_1)^n \\
+                           &- \sum\limits_{n = 1}^\infty \left( \frac{1}{2 \pi i} \oint_\gamma \frac{H(f; z_0)}{(z - z_0)^{n + 1}} dz \right) (z - z_1)^n \\
+                           &= H(f; z_1) - H(H(f; z_0); z_1)
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Da $H(f; z_0)$ allerdings analytisch in $z_1$ ist ($H(f; z_0)$ hat nur eine Polstelle und zwar $z_0$) folgt mit Bemerkung 2:
+  \[
+    H(f - H(f; z_0); z_1)) = H(f; z_1) - \underbrace{H(H(f; z_0); z_1)}_{= 0} =  H(f; z_1)
+  \]
+  Induktiv erhält man nun eine Funktion
+  \[
+    g = f - H(f; z_0) - H(f; z_1) - \dots - H(f; z_s) \text{, }
+  \]
+  von der bekannt ist, dass keine Polstelle mehr auf $r$ liegt. Die nächste Polstelle liegt nach Annahme erst bei $r'$:
+  \[
+    \left| [z^n] g \right| \in O \left( \left(\frac{1}{r'} + \varepsilon \right)^n \right)
+  \]
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Also folgt:
+  \[
+    [z^n] f = [z^n] (H(f; z_0) + H(f; z_1) + \dots + H(f; z_s)) + O \left( \left(\frac{1}{r'} + \varepsilon \right)^n \right)
+  \]
+  $\qquad$
+  \hfill
+  $\square$
+\end{frame}
+
+\begin{frame}\frametitle{Asymptotik meromorpher EFs}
+  Falls $r' > 1$ ist (andernfalls kann man den obigen Satz einfach mehrfach anwenden), erhält man für die Asymptotik:
+  \begin{align*}
+    [z^n] f &\sim \sum\limits_{i = 0}^s \sum\limits_{j = 1}^{\nu_s} \begin{pmatrix} n + j - 1 \\ j - 1 \end{pmatrix} (-1)^j \frac{a_{-j}}{z_i^{j + n}} \\
+%    &\sim \sum\limits_{i = 0}^s \sum\limits_{j = 1}^{\nu_s} \frac{(-1)^j n^{j - 1} a_{-j}}{(j - 1)! z_i^{j + n}}
+  \end{align*}
+  ($z_0, \dots, z_s$ sind die Polstellen von $f$, $k_s$ die Multiplizität der jeweiligen Polstelle)
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen}
+  \begin{block}{Definition: Reguläre Sprache}
+  	Eine Sprache  $\mathcal{L}$ ist genau dann regulär, wenn es einen regulären Ausdruck gibt, der sie erzeugt.
+  \end{block}
+  \qquad \\
+  Für einen regulären Ausdruck können wir induktiv wie folgt sehr einfach eine Mengenschreibweise finden (wobei $R_1$ und $R_2$ zwei beliebige reguläre Ausdrücke seien):
+  \begin{align*}
+    R_1 R_2 &\mapsto \mathcal{L}(R_1) \times \mathcal{L}(R_2) \\
+    R_1 | R_2 &\mapsto \mathcal{L}(R_1) \cup \mathcal{L}(R_2) \leftrightarrow \mathcal{L}(R_1) + \mathcal{L}(R_2) \\
+    (R_1)^* &\mapsto \bigcup\limits_{n \geq 0} \mathcal{L}^n(R_1) \leftrightarrow \text{SEQ}(\mathcal{L}(R_1))
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen}
+  So ist zum Beispiel der reguläre Ausdruck für binäre Wörter, die mit einer 1 beginnen gegeben durch
+  \[
+    R = 1 (0|1)^* \text{,}
+  \]
+  die zugehörige Sprache ist also
+  \begin{align*}
+    \mathcal{L}(R) &= \{ 1 \} \times \text{SEQ}(\{ 0, 1 \}) \\
+                   &= \{ 1 \} \times (\{ \varepsilon \} + \{ 0, 1 \} + \{ 0, 1 \}^2 + \dots) \text{.}
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen}
+  Das Ziel ist es nun eine Erzeugenden-Funktion für eine reguläre Sprache zu ermitteln. \\
+  \qquad \\
+  Die Zählsequenz der aus dieser Konstruktion abgeleiteten Erzeugenden-Funktion zählt Wörter jedoch eventuell mehrfach. So erzeugt
+  \[
+    R = 1 (0 | 1)^* (0 | 1)^*
+  \]
+  dieselbe Sprache wie im Beispiel eben, alle Wörter $w \in \mathcal{L}(R)$ können jedoch auf $|w|$ verschiedene Weisen „zustandekommen“.
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen}
+  Es wird also ein Mechanismus benötigt, um einen regulären Ausdruck in eine eindeutige reguläre Spezifikation zu verwandeln. \\
+  \qquad \\
+  Es ist bekannt, dass wir einen regulären Ausdruck direkt in einen NFA übersetzen können und diesen mittels der Potenzmengenkonstruktion in einen DFA. \\
+  \qquad \\
+  
+  \begin{block}{Satz von Kleene}
+    Zu jedem DFA gibt es einen regulären Ausdruck $R$, sodass jedes Wort $w \in \mathcal{L}(R)$ eindeutig aus $R$ hervorgeht.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen}
+  Folglich kann jeder reguläre Ausdruck so umgeformt werden, dass er direkt in eine eindeutige reguläre Spezifikation übersetzt werden kann. \\
+  \qquad \\
+  \begin{block}{Asymptotische Anzahl von Wörtern der Länge $n$}
+    Sei $\mathcal{L}$ eine eindeutige reguläre Spezifiation. Dann induziert die Wortlänge $|w|$, $w \in \mathcal{L}$ eine Größenfunktion und die Zählsequenz $(L_n)_{n \geq 0}$.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen (ein Beispiel)}
+  Für $R = a (b|c)^* b (c|d)^*$ über dem Alphabet $\Sigma = \{ a, b, c, d \}$ können wir schreiben:
+  \[
+    \mathcal{L}(R) = \{ a \} \times \text{SEQ}(\{ b \} + \{ c \}) \times \{ b \} \times \text{SEQ}(\{ c \} + \{ d \})
+  \]
+  \uncover<2-4>{Daraus ergibt sich die Erzeugenden-Funktion
+  \[
+  	L(z) = z \cdot \frac{1}{1 - 2z} \cdot z \cdot \frac{1}{1 - 2z} = \frac{z^2}{(1 - 4z)^2}
+  \]
+  }\uncover<3-4>{und offensichtlich ist
+  \[
+    P(z) = z^2 \,\, \text{, } \,\, Q(z) = (1 - 2z)^2 \,\, \text{ und } \frac{d^2}{dz^2} Q(z) = 8
+  \]
+  }\uncover<4-4>{sowie
+  \[
+  	\beta = 2 \,\, \text{ und } \,\, \nu = 2 \text{.}
+  \]
+  }
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen (ein Beispiel)}
+  Da es sich um eine eindeutige Polstelle handelt, kann der erste Satz angewendet werden, also ist
+  \[
+    C = 2 \cdot \frac{(-2)^2 f(\frac{1}{2})}{\frac{d^2}{dz^2} Q(\frac{1}{2})} = 2 \cdot \frac{(-2)^2 \cdot (\frac{1}{2})^2}{8} = \frac{1}{4}
+  \]
+  und damit
+  \[
+    [z^n] L \sim C 2^n n = 2^{n - 2} n \text{.}
+  \]
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen (ein Beispiel)}
+  Mit ein paar kombinatorischen Überlegungen findet man für den exakten Wert $\sum_{i = 0}^{n - 1} 2^{n - 2}$ (rot) und sieht, dass sich der asymptotische Wert (blau) sehr schnell diesem angleicht: \\
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[
+        height=0.55\textwidth,
+        width=\textwidth,
+        xmin=2,
+        xmax=15,
+        ymin=0,
+        %ymax=2^20,
+        %xlabel=LabelX,
+        %xtick={1,...,100},
+        %ylabel=LabelY,
+        ymode=log,
+        log basis y={2}]
+	  \addplot[domain={0:15}, color=red] {
+        (x - 1) * 2^(x - 2)
+      };
+      \addplot[domain={0:15}, color=blue] {
+        x * 2^(x - 2)
+      };
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen (noch ein Beispiel)}
+  Der reguläre Ausdruck $R = a (a|bb)^*$ über dem Alphabet $\Sigma = \{ a, b \}$ lässt sich als
+  \[
+  	\mathcal{L}(R) = \{ a \} \times \text{SEQ}(\{ a \} + \{ bb \})
+  \]
+  schreiben \uncover<2-3>{und ergibt die Erzeugenden-Funktion
+  \[
+    L(z) = z \cdot \frac{1}{1 - (z + z^2)} = \frac{z}{1 - z - z^2} \text{.}
+  \]
+  }\uncover<3-3>{Die Polstellen der Funktion sind gegeben durch:
+  \begin{align*}
+    & z^2 - z - 1 = 0 \\
+    \iff& (z + \frac{1}{2})^2 - \frac{5}{4} = 0 \\
+    \iff& z = -\frac{1}{2} \pm \frac{\sqrt{5}}{2}
+  \end{align*}
+  }
+\end{frame}
+
+\begin{frame}\frametitle{Reguläre Sprachen (noch ein Beispiel)}
+  Die betragsmäßig kleinere Nullstelle ist $z = -\frac{1}{2} + \frac{\sqrt{5}}{2}$. Damit ist:
+  \[
+    \beta = \frac{2}{-1 + \sqrt{5}} \,\, \text{ und } \,\, \nu = 1
+  \]
+  \uncover<2-4>{
+  \[
+    P(z) = z \text{, } \,\,
+    Q(z) = 1 - z - z^2 \,\, \text{ und } \,\,
+    \frac{d}{dz} Q(z) = -1 - 2z
+  \]
+  }\uncover<3-4>{Und weiter:
+  \[
+    C = \nu \frac{-\beta \frac{1}{\beta}}{-1 - 2 \frac{1}{\beta}} = \frac{1}{1 + 2 \frac{1}{\beta}} = \frac{1}{1 + (-1 + \sqrt{5})} = \frac{1}{\sqrt{5}}
+  \]
+  }
+  \uncover<4-4>{
+  \[
+    L \sim C \beta^n = \frac{1}{\sqrt{5}} (\frac{2}{-1 + \sqrt{5}})^n = \frac{1}{\sqrt{5}} (\frac{2 (1 + \sqrt{5})}{5 - 1})^n = \frac{1}{\sqrt{5}} \phi^n \sim f_n
+  \]
+  }
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    Fragen?
+  \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]\frametitle{Referenzen}
+  \nocite{*}
+  \printbibliography
+\end{frame}
+
+\end{document}
