@@ -1,0 +1,236 @@
+\pdfminorversion=4
+
+\documentclass{beamer}
+
+\usepackage{beamerthemeshadow}
+
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\usepackage{varwidth}
+\usepackage{amsmath}
+\usepackage[autostyle=true]{csquotes}
+\usepackage[backend=bibtex8]{biblatex}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}[text]
+\useoutertheme{infolines}
+
+\bibliography{./refs}
+
+\begin{document}
+
+\title{Implausible Consequences}
+\subtitle{of Superstrong Nonlocality}
+\author{Daniel Busch}
+\date{\today}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}\frametitle{Review}
+  \begin{itemize}
+    \item CHSH inequality tells us, that $\langle \mathcal{B} \rangle \leq 2$ for realistic
+          and local theories
+    \onslide<2->{\item Violated by a value of $2 \sqrt{2}$ in quantum mechanics}
+    \onslide<3->{\item This is the maximal theoretical violation (Cirel'son's bound)
+                       and also proven by experiments}
+    \onslide<4->{\item Question: Why is the violation of CHSH not bigger,
+                       although a value of $4$ would be perfectly possible without
+                       permitting signaling (nonlocal boxes)?}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Nonlocal boxes}
+  \begin{block}{Definition: nonlocal boxes}
+    Let $a$ and $b$ be uniformly distributed bits. Let further $x$ and $y$ be
+    arbitrary bits.
+    A nonlocal box then is a theoretical device (one-shot) having input and
+    output ports at two spacelike separated locations $A$ and $B$ with
+    $A(x) = a$ and $B(y) = b$ such that $a + b \equiv_2 x \cdot y$
+    ($\Leftrightarrow a \oplus b = x \land y$). \\
+    ($\equiv_2$ denotes congruency modulo $2$)
+  \end{block}
+  
+  This definition of nonlocal boxes is equivalent to the nonlocal boxes
+  contstructed by Popescu and Rohrlich. One can see this by interpreting
+  the observables $A_1, B_1$ as logic $0$ respectively $A_2, B_2$ as logic $1$
+  at each location and the measurement outcomes $-1$ as a logic $0$ respectively
+  $+1$ as a logic $1$ in the table below.
+\end{frame}
+  
+\begin{frame}\frametitle{Nonlocal boxes}
+  \begin{center}
+    \begin{tabular}{ c | c || c c | c c }
+      \multicolumn{2}{c ||}{}        & \multicolumn{2}{ c | }{$A_1$} & \multicolumn{2}{c}{$A_2$} \\ \cline{3-6}
+      \multicolumn{2}{c ||}{}        & $-1$  & $+1$                  & $-1$  & $+1$              \\ \hline\hline
+      \multirow{2}{*}{$B_1$}  & $-1$ & $1/2$ & $0$                   & $1/2$ & $0$               \\
+                              & $+1$ & $0$   & $1/2$                 & $0$   & $1/2$             \\ \hline
+      \multirow{2}{*}{$B_2$}  & $-1$ & $1/2$ & $0$                   & $0$   & $1/2$             \\
+                              & $+1$ & $0$   & $1/2$                 & $1/2$ & $0$               \\
+    \end{tabular}
+  \end{center}
+  
+  We also see here, that the CHSH inequality reaches its algebraic maximum in terms
+  of nonlocal boxes:
+  \begin{align*}
+    \langle \mathcal{B} \rangle &= \langle A_1 \otimes B_1 \rangle +
+                                   \langle A_1 \otimes B_2 \rangle +
+                                   \langle A_2 \otimes B_1 \rangle -
+                                   \langle A_2 \otimes B_2 \rangle \\
+                                &= 1 + 1 + 1 - (-1) = 4 \not\leq 2
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Communication complexity}
+  \begin{block}{Definition: communication complexity}
+    The communication complexity of a function $f: \{0, 1\}^n \times \{0, 1\}^n \to {0, 1}$
+    is defined as the worst case amount of bits needed to distributively
+    compute $f(x, y)$. More formal:
+    \begin{align*}
+      C(f) = \min\limits_{\text{Protocol }P} \max\limits_{x, y \in \{0, 1\}^n} f(x, y)
+    \end{align*}
+    Note that $C(f) \leq n$, because Bob can always send his complete input to
+    Alice and let her calculate the result.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Communication complexity}
+  \begin{block}{Definition: trivial communication complexity}
+    We call the communication complexity of $f$ trivial, if $C(f) \leq 1$.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Boolean functions as multi-variable polynomials}
+  \begin{block}{Definition: inner product}
+    The inner product function
+    $\text{IP}_n: \{ 0, 1 \}^n \times \{ 0, 1 \}^n \to \{ 0, 1 \}$ is defined by
+    $$\text{IP}_n(x_1 \cdots x_n, y_1 \cdots y_n) = \sum\limits_{i = 1}^{n}{x_i \cdot y_i} \text{.}$$
+    As there is no possible way of omitting a single bit when calculating
+    the result of this function, we have $C(\text{IP}_n) = n$.
+  \end{block}
+  
+  \begin{block}{Remark}
+    Given quantum entanglement, the communication complexity of $\text{IP}_n$
+    remains the same, while there are other functions, that can be computed
+    with less classical communication.
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Boolean functions as multi-variable polynomials}
+  \begin{block}{Lemma}
+    Every boolean function can be represented as a multi-variable polynomial
+    $f(x_1 \cdots x_n, y_1 \cdots y_n)$ in $\mathbb{F}_2[x]$.
+  \end{block}
+  
+  Because we construct every boolean function with the compositions $\land$ and
+  $\lor$, it is sufficient to show, that we can express these basic compositions
+  by polynomials.
+  This can be easily done in the following way:
+  \begin{align*}
+    x \land y & \equiv_2 x \cdot y \text{ and} \\
+    x \lor y & \equiv_2 x + y + x \cdot y
+  \end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Boolean functions as multi-variable polynomials}
+  \begin{block}{Lemma}
+    Every multi-variable polynomial $f(x_1 \cdots x_n, y_1 \cdots y_n) \in \mathbb{F}_2[x]$ can be written as
+    $$\sum\limits_{i = 1}^{2^n}{P_i(x_1 \cdots x_n) Q_i(y_1 \cdots y_n)} \text{,}$$
+    where
+    $P_i, Q_i \in \mathbb{F}_2[x]$ and $Q_i$ are monomials, hence
+    $$Q_i(y_1 \cdots y_n) = \prod\limits_{j \in S_i}{y_j} \text{ with } S_i \subseteq \{ 1, \dots, n \} \text{.}$$
+  \end{block}
+  
+  Of course we can factor out all monomials in $y_1, \dots, y_n$ such that
+  $f(x_1 \cdots x_n, y_1 \cdots y_n) = P_1(x_1 \cdots x_n) y_1 + \cdots + P_{2^n}(x_1 \cdots x_n) y_1 \cdots y_n$, \\
+  which essentially is the statement given above, because the amount of
+  possible monomials is bounded by the amount of subsets $S_i$, thus $2^n$.
+\end{frame}
+
+\begin{frame}\frametitle{Boolean functions as multi-variable polynomials}
+  \textbf{Example:} Let's have a look at the 2-bit equality function.
+  \begin{alignat*}{5}
+                 &&\text{EQ}(x_1 x_2, y_1 y_2) &=\,&& (x_1 \Leftrightarrow y_1) \land (x_2 \Leftrightarrow y_2) \\
+    \onslide<2->{&&                            &\equiv_2\,&& (1 + x_1 + y_1) \cdot (1 + x_2 + y_2)} \\
+    \onslide<3->{&&                            &\equiv_2\,&& 1 + x_2 + y_2 + x_1 + x_1 x_2 + x_1 y_2 + y_1 + y_1 x_2 + y_1 y_2} \\
+    \onslide<4->{&&                            &\equiv_2\,&& (1 + x_1 + x_2 + x_1 x_2) \cdot 1 + (1 + x_2) \cdot y_1 + \phantom{1} \\
+                 &&                            &\,&& (1 + x_1) \cdot y_2 + 1 \cdot y_1 y_2}
+  \end{alignat*}
+\end{frame}
+% TODO examples2
+
+\begin{frame}\frametitle{Boolean functions as multi-variable polynomials}
+  \begin{block}{Corollary}
+    Regarding communication complexity, we can reduce every boolean function
+    to the inner product.
+  \end{block}
+  
+  Let $x'_i = P_i(x_1 \cdots x_n)$ and $y'_i = Q_i(y_1 \cdots y_n)$. This is
+  possible, because Alice can precalculate $P_i$ on her side and Bob $Q_i$
+  respectively on his side. We then have, as desired:
+  $$g(x_1' \cdots x_{2^n}', y_1' \cdots y_{2^n}') = \sum\limits_{i = 1}^{2^n}{x'_i \cdot y'_i}$$
+\end{frame}
+
+\begin{frame}\frametitle{Consequences of superstrong nonlocality}
+  \begin{block}{Theorem}
+    Assuming a theory, in which we can simulate (perfect) nonlocal boxes,
+    the communication complexity of every boolean function becomes trivial.
+  \end{block}
+  
+  As shown above, we can express every boolean function as an inner product:
+  $$\text{IP}_n(x_1 \cdot x_n, y_1 \cdot y_n) = \sum\limits_{i = 1}^{n}{x_i \cdot y_i} \text{.}$$
+\end{frame}
+
+\begin{frame}\frametitle{Consequences of superstrong nonlocality}
+  The correlation $a \oplus b = x \land y \iff a + b \equiv_2 x \cdot y$ now yields:
+  \begin{align*}
+    \text{IP}_n(a_1 \cdots a_n, b_1 \cdots b_n) &= \sum\limits_{i = 1}^{n}{a_i + b_i} \\
+                                                &= \underbrace{\sum\limits_{i = 1}^{n}{a_i}}_{\substack{Alice's \\ part}} +
+                                                   \underbrace{\sum\limits_{i = 1}^{n}{b_i}}_{\substack{Bob's \\ part}} \\
+                                                &= \alpha + \beta
+  \end{align*}
+  
+  To get the final result, Bob just has to transmit his bit $\beta$ to
+  Alice, so she can compute $\alpha + \beta$.
+\end{frame}
+
+\begin{frame}\frametitle{Conclusion}
+  \begin{itemize}
+  	\item Availability of perfect nonlocal boxes would cause every boolean function to
+  	      have trivial communication complexity
+  	\onslide<2->{\item Not conflicting with physical intuition, but...}
+  	\onslide<3->{\item Implausible according to the experiences in complexity
+  	                   theory and general intuition of what computational
+  	                   complexity means}
+  	\onslide<4->{\item One interpretation of the fact, that quantum
+  	                   mechanics does not go beyond the value
+  	                   $\langle \mathcal{B} \rangle = 2 \sqrt{2}$}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Even stronger results}
+  \begin{itemize}
+    \item Even with imperfect nonlocal boxes we can reach trivial communication
+          complexity in a probabilistic sense
+    \onslide<2->{\item With nonlocal boxes of a success probability of
+                       $p = 90,8\%$ every boolean function can be computed
+                       correctly with $q > \frac{1}{2}$}
+    \onslide<3->{\item This is the case for
+                       $\langle B \rangle > 2 \sqrt{\frac{8}{3}}$}
+    \onslide<4->{\item Proven by Brassard et al in 2006}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    Questions?
+  \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]\frametitle{References}
+  \nocite{*}
+  \printbibliography
+\end{frame}
+
+\end{document}
